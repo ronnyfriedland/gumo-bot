@@ -14,11 +14,12 @@ import (
 
 const dateLayout = "2006-01-02"
 
-const gumoMessages = "gumo.messages"
-const gumoStatus = "gumo.status"
+const gumoProperties = "/etc/gumo/gumo.properties"
+const gumoMessages = "/etc/gumo/gumo.messages"
+const gumoStatus = "/etc/gumo/gumo.status"
 
 func main() {
-	userId, authToken, channel, url := readProperties()
+	userId, authToken, channel, url := readProperties(gumoProperties)
 
 	if needToGumo(gumoStatus) {
 		data, _ := json.Marshal(map[string]string{
@@ -54,8 +55,8 @@ func main() {
 	}
 }
 
-func readProperties() (string, string, string, string) {
-	props := properties.MustLoadFile("gumo.properties", properties.UTF8)
+func readProperties(filename string) (string, string, string, string) {
+	props := properties.MustLoadFile(filename, properties.UTF8)
 	userId := props.GetString("userId", "unknown-userId")
 	authToken := props.GetString("authToken", "unknown-authToken")
 	channel := props.GetString("channel", "unknown-channel")
@@ -69,7 +70,7 @@ func needToGumo(filename string) bool {
 
 	body, err := os.ReadFile(filename)
 	if err != nil {
-		log.Fatalf("Unable to read file %v", err)
+		log.Printf("Unable to read file %v", err)
 	}
 	lastStatusDateString := string(body)
 
