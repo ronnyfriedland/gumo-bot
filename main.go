@@ -18,6 +18,7 @@ const gumoProperties = "/etc/gumo/gumo.properties"
 const gumoMessages = "/etc/gumo/gumo.messages"
 const gumoStatus = "/etc/gumo/gumo.status"
 
+// THe main method to start the application
 func main() {
 	userId, authToken, channel, url := readProperties(gumoProperties)
 
@@ -55,6 +56,7 @@ func main() {
 	}
 }
 
+// Read property file given by parameter "filename"
 func readProperties(filename string) (string, string, string, string) {
 	props := properties.MustLoadFile(filename, properties.UTF8)
 	userId := props.GetString("userId", "unknown-userId")
@@ -64,6 +66,7 @@ func readProperties(filename string) (string, string, string, string) {
 	return userId, authToken, channel, url
 }
 
+// Check if gumo was already triggered
 func needToGumo(filename string) bool {
 	currentTime := time.Now()
 	statusDateString := currentTime.Format(dateLayout)
@@ -81,16 +84,16 @@ func needToGumo(filename string) bool {
 	} else {
 		return true
 	}
-
 }
 
+// Update the gumo status - set the current date to prevent another gumo today
 func updateNeedToGumo(filename string) {
 	currentTime := time.Now()
 	statusDateString := currentTime.Format(dateLayout)
 
 	f, err := os.Create(filename)
-
 	if err != nil {
+
 		log.Fatalf("Unable to create status file %v", err)
 	}
 
@@ -103,6 +106,8 @@ func updateNeedToGumo(filename string) {
 	}
 }
 
+// Select the gumo message out of the available message in message file
+// provided by the givem parameter "filename"
 func chooseMessage(filename string) string {
 	var messages []string
 
@@ -118,6 +123,7 @@ func chooseMessage(filename string) string {
 	return shuffleMessage(messages)
 }
 
+// Select random message from list of messages
 func shuffleMessage(messages []string) string {
 	rand.Shuffle(len(messages), func(i, j int) {
 		messages[i], messages[j] = messages[j], messages[i]
