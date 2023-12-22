@@ -22,7 +22,6 @@ func main() {
 	var gumoMessages = *configpath + "/gumo.messages"
 	var gumoStatus = *configpath + "/gumo.status"
 
-	println(gumoProperties)
 	if needToGumo(gumoStatus) {
 		target, err := configuration.GetTarget(gumoProperties)
 		if err != nil {
