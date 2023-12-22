@@ -3,40 +3,67 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/magiconair/properties"
+	"flag"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
-	"strings"
+	"ronnyfriedland/gumo/configuration"
 	"time"
 )
 
 const dateLayout = "2006-01-02"
 
-const gumoProperties = "/etc/gumo/gumo.properties"
-const gumoMessages = "/etc/gumo/gumo.messages"
-const gumoStatus = "/etc/gumo/gumo.status"
-
 // THe main method to start the application
 func main() {
-	userId, authToken, channel, url := readProperties(gumoProperties)
+	var configpath = flag.String("configpath", "/etc/gumo", "the tar")
+	flag.Parse()
 
+	var gumoProperties = *configpath + "/gumo.properties"
+	var gumoMessages = *configpath + "/gumo.messages"
+	var gumoStatus = *configpath + "/gumo.status"
+
+	println(gumoProperties)
 	if needToGumo(gumoStatus) {
-		data, _ := json.Marshal(map[string]string{
-			"channel": channel,
-			"text":    chooseMessage(gumoMessages),
-		})
-
-		client := &http.Client{}
-		req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+		target, err := configuration.GetTarget(gumoProperties)
 		if err != nil {
-			log.Fatalf("Error creating request %v", err)
+			log.Fatalf("configuration error: %v", err)
 			return
 		}
-		req.Header.Add("Content-Type", "application/json")
-		req.Header.Add("X-Auth-Token", authToken)
-		req.Header.Add("X-User-Id", userId)
+
+		url, err := target.Url(gumoProperties)
+		if err != nil {
+			log.Fatalf("Error getting url: %v", err)
+			return
+		}
+
+		data, err := target.Payload(gumoProperties, gumoMessages)
+		if err != nil {
+			log.Fatalf("Error building payload: %v", err)
+			return
+		}
+
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			log.Fatalf("Error formatting json: %v", err)
+			return
+		}
+
+		headers, err := target.Headers(gumoProperties)
+		if err != nil {
+			log.Fatalf("Error getting headers: %v", err)
+			return
+		}
+
+		client := &http.Client{}
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+		if err != nil {
+			log.Fatalf("Error creating request: %v", err)
+			return
+		}
+
+		for k := range headers {
+			req.Header.Add(k, headers[k])
+		}
 
 		resp, err := client.Do(req)
 		if err != nil {
@@ -54,16 +81,6 @@ func main() {
 	} else {
 		log.Printf("Already sent message for today - skipping")
 	}
-}
-
-// Read property file given by parameter "filename"
-func readProperties(filename string) (string, string, string, string) {
-	props := properties.MustLoadFile(filename, properties.UTF8)
-	userId := props.GetString("userId", "unknown-userId")
-	authToken := props.GetString("authToken", "unknown-authToken")
-	channel := props.GetString("channel", "unknown-channel")
-	url := props.GetString("url", "unknown-url")
-	return userId, authToken, channel, url
 }
 
 // Check if gumo was already triggered
@@ -104,29 +121,4 @@ func updateNeedToGumo(filename string) {
 	if err2 != nil {
 		log.Fatalf("Unable to write to status file %v", err2)
 	}
-}
-
-// Select the gumo message out of the available message in message file
-// provided by the givem parameter "filename"
-func chooseMessage(filename string) string {
-	var messages []string
-
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		log.Fatalf("Unable to read from messages file %v", err)
-	}
-
-	lines := strings.Split(string(data), "\n")
-	for _, line := range lines {
-		messages = append(messages, line)
-	}
-	return shuffleMessage(messages)
-}
-
-// Select random message from list of messages
-func shuffleMessage(messages []string) string {
-	rand.Shuffle(len(messages), func(i, j int) {
-		messages[i], messages[j] = messages[j], messages[i]
-	})
-	return messages[0]
 }

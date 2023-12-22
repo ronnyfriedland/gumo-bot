@@ -1,0 +1,17 @@
+# possible values: rocketchat, webex
+target =
+
+##############
+# rocketchat #
+##############
+userId =
+authToken =
+channel =
+url =
+
+#############
+#   webex   #
+#############
+authToken =
+room =
+url =
