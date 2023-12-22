@@ -15,7 +15,7 @@ const dateLayout = "2006-01-02"
 
 // THe main method to start the application
 func main() {
-	var configpath = flag.String("configpath", "/etc/gumo", "the tar")
+	var configpath = flag.String("configpath", "/etc/gumo", "the config path")
 	flag.Parse()
 
 	var gumoProperties = *configpath + "/gumo.properties"
