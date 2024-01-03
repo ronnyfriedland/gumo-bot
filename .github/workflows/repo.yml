@@ -17,13 +17,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build
-        run: go build -v ./...
+        run: go build -v -o gumo ./...
 
       - name: Copy necessary files
         run: |
           mkdir PKG_SOURCE
-          ls -la
-          find .
           cp -Rf ./gumo ./debian PKG_SOURCE
           dpkg-deb --build PKG_SOURCE gumo.deb
 
