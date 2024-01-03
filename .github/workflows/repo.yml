@@ -22,7 +22,7 @@ jobs:
       - name: Copy necessary files
         run: |
           mkdir PKG_SOURCE
-          cp -Rf ./gumo ./debian PKG_SOURCE
+          cp -Rf ./gumo ./DEBIAN PKG_SOURCE
           dpkg-deb --build PKG_SOURCE gumo.deb
 
       - name: Release the Deb package
