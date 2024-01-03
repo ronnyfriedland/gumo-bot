@@ -27,7 +27,7 @@ jobs:
           cp -Rf ./gumo PKG_SOURCE/usr/local/bin
           cp -Rf ./gumo.properties.template PKG_SOURCE/etc/gumo/gumo.properties
           cp -Rf ./gumo.messages PKG_SOURCE/etc/gumo/gumo.messages
-          dpkg-deb --build PKG_SOURCE gumo.deb
+          dpkg-deb --build PKG_SOURCE gumo_${{github.ref_name}}.deb
 
       - name: Release the Deb package
         uses: softprops/action-gh-release@v1
