@@ -23,10 +23,13 @@ jobs:
         run: |
           mkdir -p PKG_SOURCE/usr/local/bin
           mkdir -p PKG_SOURCE/etc/gumo
-          cp -Rf ./DEBIAN PKG_SOURCE
-          cp -Rf ./gumo PKG_SOURCE/usr/local/bin
-          cp -Rf ./gumo.properties.template PKG_SOURCE/etc/gumo/gumo.properties
-          cp -Rf ./gumo.messages PKG_SOURCE/etc/gumo/gumo.messages
+          cp -Rf ./DEBIAN PKG_SOURCE/
+          cp -Rf ./gumo PKG_SOURCE/usr/local/bin/
+          cp -Rf ./gumo.properties.template PKG_SOURCE/etc/gumo/
+          cp -Rf ./gumo.messages PKG_SOURCE/etc/gumo/
+
+      - name: Create Deb package
+        run: |
           dpkg-deb --build PKG_SOURCE gumo_${{github.ref_name}}.deb
 
       - name: Release the Deb package
