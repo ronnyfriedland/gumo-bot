@@ -21,11 +21,15 @@ jobs:
 
       - name: Copy necessary files
         run: |
-          mkdir PKG_SOURCE
-          cp -Rf ./gumo ./DEBIAN PKG_SOURCE
+          mkdir -p PKG_SOURCE/usr/local/bin
+          mkdir -p PKG_SOURCE/etc/gumo
+          cp -Rf ./DEBIAN PKG_SOURCE
+          cp -Rf ./gumo PKG_SOURCE/usr/local/bin
+          cp -Rf ./gumo.properties.template PKG_SOURCE/etc/gumo/gumo.properties
+          cp -Rf ./gumo.messages PKG_SOURCE/etc/gumo/gumo.messages
           dpkg-deb --build PKG_SOURCE gumo.deb
 
       - name: Release the Deb package
         uses: softprops/action-gh-release@v1
         with:
-          files: gumo.deb
+          files: gumo_${{github.ref_name}}.deb
