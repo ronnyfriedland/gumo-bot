@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          path: "REPO"
 
       - name: Build
         run: go build -v ./...
@@ -24,7 +22,7 @@ jobs:
       - name: Copy necessary files
         run: |
           mkdir PKG_SOURCE
-          cp -Rf REPO/gumo REPO/DEBIAN PKG_SOURCE
+          cp -Rf ./gumo ./debian PKG_SOURCE
           dpkg-deb --build PKG_SOURCE gumo.deb
 
       - name: Release the Deb package
