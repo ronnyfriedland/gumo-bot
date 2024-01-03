@@ -1,0 +1,7 @@
+Package: gumo
+Version: 1.0.0
+Section: misc
+Priority: optional
+Architecture: all
+Maintainer: Ronny Friedland <mail@ronnyfriedland.de>
+Description: Gumo Bot
