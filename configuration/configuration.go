@@ -101,7 +101,7 @@ func readProperty(filename string, key string) (string, error) {
 	value := readPropertyDefault(filename, key, "")
 
 	if value == "" {
-		return "", errors.New("no property with given key " + key + "found")
+		return "", errors.New("no property with given key '" + key + "' found")
 	} else {
 		return value, nil
 	}
