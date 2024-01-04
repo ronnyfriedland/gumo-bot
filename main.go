@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -69,7 +70,12 @@ func main() {
 			log.Fatalf("Error sending request %v", err)
 			return
 		}
-		defer resp.Body.Close()
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				log.Fatalf("Unable to close response stream %v", err)
+			}
+		}(resp.Body)
 
 		if resp.StatusCode == 200 {
 			log.Printf("Successfully sent message for today")
@@ -113,7 +119,12 @@ func updateNeedToGumo(filename string) {
 		log.Fatalf("Unable to create status file %v", err)
 	}
 
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Fatalf("Unable to close file %v", err)
+		}
+	}(f)
 
 	_, err2 := f.WriteString(statusDateString)
 
