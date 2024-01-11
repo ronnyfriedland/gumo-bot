@@ -25,7 +25,7 @@ jobs:
           mkdir -p PKG_SOURCE/etc/gumo
           cp -Rf ./DEBIAN PKG_SOURCE/
           cp -Rf ./gumo PKG_SOURCE/usr/local/bin/
-          cp -Rf ./gumo.properties.template PKG_SOURCE/etc/gumo/
+          cp -Rf ./gumo.properties.template PKG_SOURCE/etc/gumo/gumo.properties
           cp -Rf ./gumo.messages PKG_SOURCE/etc/gumo/
 
       - name: Create Deb package
