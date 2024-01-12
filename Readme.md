@@ -49,6 +49,24 @@ This file has to be placed in `/etc/gumo/` directory.
 
 This file stores the status to determine if the good morning message was already send for the current day.
 
+## Execution
+
+### Prerequisites
+
+The user who is executing the gumo needs write access to the status file. 
+During installation a `gumo` group is created which can be used to get write permissions.
+
+### Do gumo
+
+ If your user is member of the `gumo` group or you are `root`:
+```shell
+gumo
+```
+
+If you do not want to add you user to the `gumo` group you can use `sudo`:
+```shell
+sudo gumo
+```
 
 ## License
 
