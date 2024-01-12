@@ -5,7 +5,7 @@ set -e
 case "$1" in
     install|upgrade)
       if ! getent group gumo >/dev/null; then
-        addgroup --system gumo >/dev/null
+        addgroup --system gumo
       fi
     ;;
 
