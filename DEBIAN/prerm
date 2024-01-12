@@ -4,7 +4,9 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-      delgroup --system gumo
+      if getent group gumo >/dev/null; then
+        delgroup --system gumo
+      fi
     ;;
 
     failed-upgrade)
