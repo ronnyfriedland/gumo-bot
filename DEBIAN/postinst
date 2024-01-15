@@ -5,6 +5,7 @@ set -e
 case "$1" in
     configure)
       chown -R root:gumo /etc/gumo
+      chmod -R g+w /etc/gumo
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
