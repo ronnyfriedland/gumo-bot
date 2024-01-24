@@ -3,7 +3,6 @@ package configuration
 import (
 	"errors"
 	"github.com/magiconair/properties"
-	"ronnyfriedland/gumo/message"
 )
 
 // Target The target interface
@@ -31,12 +30,12 @@ func (rc RocketchatTarget) Url(properties string) (string, error) {
 }
 
 // Payload Returns the rocketchat related payload data
-func (rc RocketchatTarget) Payload(properties string, messages string) (map[string]string, error) {
+func (rc RocketchatTarget) Payload(properties string, message string) (map[string]string, error) {
 	channel, err := readProperty(properties, "channel")
 	if err == nil {
 		return map[string]string{
 			"channel": channel,
-			"text":    message.ChooseMessage(messages),
+			"text":    message,
 		}, nil
 	}
 	return nil, err
@@ -71,12 +70,12 @@ func (we WebexTarget) Url(properties string) (string, error) {
 }
 
 // Payload Returns the webex related payload data
-func (we WebexTarget) Payload(properties string, messages string) (map[string]string, error) {
+func (we WebexTarget) Payload(properties string, message string) (map[string]string, error) {
 	roomId, err := readProperty(properties, "channel")
 	if err == nil {
 		return map[string]string{
 			"roomId": roomId,
-			"text":   message.ChooseMessage(messages),
+			"text":   message,
 		}, nil
 	}
 	return nil, err

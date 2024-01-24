@@ -9,14 +9,17 @@ import (
 	"net/http"
 	"os"
 	"ronnyfriedland/gumo/configuration"
+	"ronnyfriedland/gumo/message"
 	"time"
 )
 
 const dateLayout = "2006-01-02"
 
+
 // THe main method to start the application
 func main() {
 	var configpath = flag.String("configpath", "/etc/gumo", "the config path")
+	var directmessage = flag.String("message", "", "the message to send directly")
 	flag.Parse()
 
 	var gumoProperties = *configpath + "/gumo.properties"
@@ -36,7 +39,11 @@ func main() {
 			return
 		}
 
-		data, err := target.Payload(gumoProperties, gumoMessages)
+		if *directmessage == "" {
+			*directmessage = message.ChooseMessage(gumoMessages)
+		}
+
+		data, err := target.Payload(gumoProperties, *directmessage)
 		if err != nil {
 			log.Fatalf("Error building payload: %v", err)
 			return
