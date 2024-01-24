@@ -12,11 +12,6 @@ jobs:
   Create_Packages:
     name: Create Package
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -35,9 +30,9 @@ jobs:
 
       - name: Create Deb package
         run: |
-          dpkg-deb --build PKG_SOURCE gumo_${{github.ref_name}}_${{ matrix.platform }}.deb
+          dpkg-deb --build PKG_SOURCE gumo_${{github.ref_name}}.deb
 
       - name: Release the Deb package
         uses: softprops/action-gh-release@v1
         with:
-          files: gumo_${{github.ref_name}}_${{ matrix.platform }}.deb
+          files: gumo_${{github.ref_name}}.deb
