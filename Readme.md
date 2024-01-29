@@ -8,7 +8,7 @@ The gumo application provides the following arguments which can be passed:
 | Property      | Description                                                               |
 |---------------|---------------------------------------------------------------------------|
 | configpath    | Defines the location of the configuration files, default: /etc/gumo       |
-| directmessage | Defines the message to send and skips shuffle selection from message file |
+| message       | Defines the message to send and skips shuffle selection from message file |
 
 ## Configuration
 
