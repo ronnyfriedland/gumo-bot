@@ -3,10 +3,13 @@
 set -e
 
 case "$1" in
-    remove|upgrade|deconfigure)
+    remove|deconfigure)
       if getent group gumo >/dev/null; then
         delgroup --system gumo
       fi
+    ;;
+
+    upgrade)
     ;;
 
     failed-upgrade)
