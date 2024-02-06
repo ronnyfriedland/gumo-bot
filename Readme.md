@@ -64,7 +64,7 @@ During installation a `gumo` group is created which can be used to get write per
 gumo
 ```
 
-If you do not want to add you user to the `gumo` group you can use `sudo`:
+If you do not want to add your user to the `gumo` group you can use `sudo`:
 ```shell
 sudo gumo
 ```
