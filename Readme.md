@@ -69,6 +69,10 @@ If you do not want to add you user to the `gumo` group you can use `sudo`:
 sudo gumo
 ```
 
+## Releases
+
+You can find all available releases [here](https://github.com/ronnyfriedland/gumo-bot/releases)
+
 ## License
 
 This application is published under the [MIT license](LICENSE).
